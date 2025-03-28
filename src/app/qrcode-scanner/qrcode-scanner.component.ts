@@ -1,8 +1,10 @@
 import { NgIf } from '@angular/common';
-import { Component, ViewChild } from '@angular/core';
+import { Component, Inject, ViewChild } from '@angular/core';
 import { BarcodeFormat } from '@zxing/library';
 import { ZXingScannerComponent, ZXingScannerModule } from '@zxing/ngx-scanner';
 import { ErrorMessageComponent } from "../error-message/error-message.component";
+import { ItemModule } from '../item/item.module';
+import { DBManagerService } from '../dbmanager/dbmanager.service';
 
 @Component({
   selector: 'app-qrcode-scanner',
@@ -16,6 +18,12 @@ export class QRCodeScannerComponent {
   public qrCodeResult: string = '';
   public devices: MediaDeviceInfo[] = [];
   public selectedDevice: MediaDeviceInfo | undefined;
+  private db: DBManagerService;
+
+  constructor(@Inject(DBManagerService) db: DBManagerService) {
+    this.db = db;
+  }
+
 
   public allowedFormats: BarcodeFormat[] = [
     BarcodeFormat.QR_CODE,
@@ -34,6 +42,8 @@ export class QRCodeScannerComponent {
   public handleQrCodeResult(result: string): void {
     this.qrCodeResult = result;
     this.qrCodeScannerEnabled = false;
+    const item: ItemModule = ItemModule.fromISOOSIBACSICS(this.qrCodeResult);
+    this.db.addDocument(item);
   }
 
   public handleCamerasFound(devices: MediaDeviceInfo[]): void {
@@ -66,7 +76,10 @@ export class QRCodeScannerComponent {
   }
 
   public getResult(): string {
-    return this.qrCodeResult;
+    if (this.qrCodeResult !== '') {
+      return this.qrCodeResult;
+    }
+    return '';
   }
 
   public handleError(error: any): void {

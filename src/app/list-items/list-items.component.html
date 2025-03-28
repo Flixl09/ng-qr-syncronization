@@ -1,0 +1,12 @@
+<div class="container py-4">
+    <h2 class="text-center">List of Items</h2>
+    <div class="text-center mb-3">
+        <button class="btn btn-warning" (click)="reload()">Reload</button>
+    </div>
+    <ul class="list-group">
+        <li *ngFor="let item of items; let i = index" class="list-group-item text-center">
+            {{ item._id }} - {{ item.article }} - {{ item.amountInStock }} - {{ item.deleted}}
+            <button class="btn btn-danger btn-sm ms-2" (click)="deleteItem(i)">Delete</button>
+        </li>
+    </ul>
+</div>

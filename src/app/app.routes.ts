@@ -1,9 +1,9 @@
 import { Routes } from '@angular/router';
-import { QRCodeScannerComponent } from './qrcode-scanner/qrcode-scanner.component';
+import { QRViewComponent } from './qrview/qrview.component';
 
 export const routes: Routes = [
     {
         path: 'qr-scanner',
-        component: QRCodeScannerComponent
+        component: QRViewComponent
     }
 ];

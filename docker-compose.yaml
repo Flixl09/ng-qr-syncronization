@@ -1,0 +1,14 @@
+services:
+  autchdb:
+    image: couchdb:latest
+    container_name: AutchDB
+    ports:
+      - "5984:5984"
+    environment:
+      - COUCHDB_USER=root
+      - COUCHDB_PASSWORD=root
+    volumes:
+      - couchdb_data:/opt/couchdb/data
+
+volumes:
+  couchdb_data:
