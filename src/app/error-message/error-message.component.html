@@ -1,0 +1,15 @@
+<ngb-alert
+    [animation]="true"
+    [dismissible]="true"
+    [type]="'danger'"
+    (closed)="errorMessage = ''"
+    *ngIf="errorMessage"
+    >
+    <div class="alert-body">
+        <h4 class="alert-heading">Error</h4>
+        <p>Oh neien was hast du denn nur getahn</p>
+    </div>
+    <p>
+        {{ errorMessage }}
+    </p>
+</ngb-alert>
