@@ -16,32 +16,28 @@ export class ListItemsComponent {
 
   constructor(@Inject(DBManagerService) db: DBManagerService) {
     this.db = db;
+    this.db.setUpdateListener(this.reload.bind(this));
     this.getItems();
   }
 
   getItems() {
     this.db.getAllDocuments((result: any) => {
-      
-    }
+      this.items = result.map((item: any) => {
+        const itemObj = new ItemModule();
+        itemObj._id = item.id;
+        itemObj.article = item.doc.article;
+        itemObj.amountInStock = item.doc.amountInStock;
+        itemObj.deleted = item.doc.deleted;
+        return itemObj;
+      });
+    });
   }
 
   reload() {
     this.getItems();
   }
 
-  deleteItem(id: number) {
-    const id_string = id.toString();
-    this.db.deleteDocument(id_string);
-    this.reload();
-  }
-
-  updateItem(item: ItemModule) {
-    this.db.updateDocument(item);
-    this.reload();
-  }
-
-  addItem(item: ItemModule) {
-    this.db.addDocument(item);
-    this.reload();
+  deleteItem(id: string) {
+    this.db.deleteDocument(id, this.reload.bind(this));
   }
 } 

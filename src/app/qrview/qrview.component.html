@@ -1,4 +1,6 @@
 <main>
     <app-qrcode-scanner></app-qrcode-scanner>
-    <app-list-items></app-list-items>
+    <app-add-item *ngIf="!this.vmanager.itemExists && this.vmanager.itemSelected"></app-add-item>
+    <app-list-items *ngIf="this.vmanager.itemExists && this.vmanager.itemSelected"></app-list-items>
+    <h2 class="h2 text-center" *ngIf="!this.vmanager.itemSelected">Scan a QR Code to start</h2>
 </main>

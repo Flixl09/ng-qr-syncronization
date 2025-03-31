@@ -12,6 +12,7 @@ export class ItemModule {
   article?: string;
   amountInStock?: number;
   deleted?: boolean;
+  _rev?: string;
 
   public static fromISOOSIBACSICS(item: string): ItemModule {
     const itemObj = new ItemModule();
@@ -44,5 +45,14 @@ export class ItemModule {
 
   public toString(): string {
     return `{"id":${this._id},"article":"${this.article}","amountInStock":${this.amountInStock},"deleted":${this.deleted}}`;
+  }
+
+  public newItem(id: string, article: string, amountInStock: number, deleted: boolean): ItemModule {
+    const itemObj = new ItemModule();
+    itemObj._id = id;
+    itemObj.article = article;
+    itemObj.amountInStock = amountInStock;
+    itemObj.deleted = deleted;
+    return itemObj;
   }
 }

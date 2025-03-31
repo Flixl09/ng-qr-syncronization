@@ -13,3 +13,18 @@
         {{ errorMessage }}
     </p>
 </ngb-alert>
+
+<ngb-alert
+    [animation]="true"
+    [dismissible]="true"
+    [type]="'success'"
+    (closed)="successMessage = ''"
+    *ngIf="successMessage"
+    >
+    <div class="alert-body">
+        <h4 class="alert-heading">Success</h4>
+    </div>
+    <p>
+        {{ successMessage }}
+    </p>
+</ngb-alert>

@@ -1,0 +1,50 @@
+<div class="container mt-4">
+  <form>
+    <div class="mb-3">
+      <label for="itemId" class="form-label">Item ID</label>
+      <input
+        type="text"
+        id="itemId"
+        class="form-control"
+        [(ngModel)]="vmanager.item!._id"
+        name="itemId"
+        readonly
+      />
+    </div>
+
+    <div class="mb-3">
+      <label for="itemArticle" class="form-label">Article</label>
+      <input
+        type="text"
+        id="itemArticle"
+        class="form-control"
+        [(ngModel)]="vmanager.item!.article"
+        name="itemArticle"
+      />
+    </div>
+
+    <div class="mb-3">
+      <label for="itemAmount" class="form-label">Amount in Stock</label>
+      <input
+        type="number"
+        id="itemAmount"
+        class="form-control"
+        [(ngModel)]="vmanager.item!.amountInStock"
+        name="itemAmount"
+      />
+    </div>
+
+    <div class="mb-3 form-check">
+      <input
+        type="checkbox"
+        id="itemDeleted"
+        class="form-check-input"
+        [(ngModel)]="vmanager.item!.deleted"
+        name="itemDeleted"
+      />
+      <label for="itemDeleted" class="form-check-label">Deleted</label>
+    </div>
+
+    <button type="button" class="btn btn-primary" (click)="onSubmit()">Save</button>
+  </form>
+</div>

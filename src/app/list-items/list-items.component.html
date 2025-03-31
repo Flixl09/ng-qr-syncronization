@@ -6,7 +6,7 @@
     <ul class="list-group">
         <li *ngFor="let item of items; let i = index" class="list-group-item text-center">
             {{ item._id }} - {{ item.article }} - {{ item.amountInStock }} - {{ item.deleted}}
-            <button class="btn btn-danger btn-sm ms-2" (click)="deleteItem(i)">Delete</button>
+            <button class="btn btn-danger btn-sm ms-2" (click)="deleteItem(item._id!)">Delete</button>
         </li>
     </ul>
 </div>

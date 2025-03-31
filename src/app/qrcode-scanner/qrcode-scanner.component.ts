@@ -1,10 +1,11 @@
 import { NgIf } from '@angular/common';
-import { Component, Inject, ViewChild } from '@angular/core';
+import { Component, Inject, Input, ViewChild } from '@angular/core';
 import { BarcodeFormat } from '@zxing/library';
 import { ZXingScannerComponent, ZXingScannerModule } from '@zxing/ngx-scanner';
 import { ErrorMessageComponent } from "../error-message/error-message.component";
 import { ItemModule } from '../item/item.module';
 import { DBManagerService } from '../dbmanager/dbmanager.service';
+import { ViewManagerService } from '../view-manager/view-manager.service';
 
 @Component({
   selector: 'app-qrcode-scanner',
@@ -19,9 +20,11 @@ export class QRCodeScannerComponent {
   public devices: MediaDeviceInfo[] = [];
   public selectedDevice: MediaDeviceInfo | undefined;
   private db: DBManagerService;
+  vmanager: ViewManagerService;
 
-  constructor(@Inject(DBManagerService) db: DBManagerService) {
+  constructor(@Inject(DBManagerService) db: DBManagerService, @Inject(ViewManagerService) vmanager: ViewManagerService) {
     this.db = db;
+    this.vmanager = vmanager;
   }
 
 
@@ -39,11 +42,23 @@ export class QRCodeScannerComponent {
   @ViewChild('error', { static: false })
   errorMessage: ErrorMessageComponent | undefined;
 
-  public handleQrCodeResult(result: string): void {
+  public async handleQrCodeResult(result: string) {
     this.qrCodeResult = result;
     this.qrCodeScannerEnabled = false;
     const item: ItemModule = ItemModule.fromISOOSIBACSICS(this.qrCodeResult);
-    this.db.addDocument(item);
+    await this.db.getDocument(item._id!, (doc: any) => {
+      if (doc) {
+        this.vmanager.itemExists = true;
+        this.vmanager.itemSelected = true;
+        this.errorMessage?.setSuccessMessage('Item wurde in der Datenbank gefunden...');
+      }
+      else {
+        this.vmanager.itemExists = false;
+        this.vmanager.itemSelected = true;
+        this.vmanager.item = item;
+        this.errorMessage?.setErrorMessage('Item wurde nicht in der Datenbank gefunden...');
+      }
+    });
   }
 
   public handleCamerasFound(devices: MediaDeviceInfo[]): void {
@@ -54,6 +69,9 @@ export class QRCodeScannerComponent {
   }
   
   public enableScanner(): void {
+    this.qrCodeResult = '';
+    this.vmanager.itemExists = false;
+    this.vmanager.itemSelected = false;
     this.qrCodeScannerEnabled = true;
   }
 
@@ -76,10 +94,7 @@ export class QRCodeScannerComponent {
   }
 
   public getResult(): string {
-    if (this.qrCodeResult !== '') {
-      return this.qrCodeResult;
-    }
-    return '';
+    return this.qrCodeResult;
   }
 
   public handleError(error: any): void {

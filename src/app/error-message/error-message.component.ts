@@ -12,8 +12,13 @@ import { NgbAlert } from '@ng-bootstrap/ng-bootstrap';
 })
 export class ErrorMessageComponent {
   public errorMessage: string = '';
+  public successMessage: string = '';
 
   setErrorMessage(message: string) {
     this.errorMessage = message;
+  }
+
+  setSuccessMessage(message: string) {
+    this.successMessage = message;
   }
 }
