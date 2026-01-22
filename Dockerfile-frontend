@@ -1,0 +1,18 @@
+FROM node:24-bullseye-slim AS builder
+
+LABEL author="Felix Schmid"
+WORKDIR /app
+
+
+COPY package.json package-lock.json ./
+RUN npm install
+
+COPY . .
+
+RUN npm run build
+
+FROM nginx:alpine AS runner
+
+VOLUME /var/cache/nginx
+COPY --from=builder /app/dist/autch-db/browser /usr/share/nginx/html
+COPY ./angular-nginx.config /etc/nginx/conf.d/default.conf

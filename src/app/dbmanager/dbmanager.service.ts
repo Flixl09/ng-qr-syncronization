@@ -95,7 +95,7 @@ export class DBManagerService{
 
   syncDB() {
     console.log('Syncing database...');
-    const remoteDB = new PouchDB('http://localhost:5984/auadb');
+    const remoteDB = new PouchDB('http://auadb:5984/auadb');
     this.db.sync(remoteDB, {
       live: true,
       retry: true,
